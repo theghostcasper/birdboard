@@ -7,13 +7,20 @@ use Illuminate\Http\Request;
 
 class ProjectsController extends Controller
 {
-    public function index(Project $project) {
-        return $project->all();
+    public function index() {
+        $projects = Project::all();
+        return view('projects.index', compact('projects'));
     }
 
     public function store(Project $project) {
-        $project::create(request(['title', 'description']));
+        $attributes = request()->validate(['title' => 'required', 'description' => 'required']);
+
+        $project::create($attributes);
 
         return redirect('/projects');
+    }
+
+    public function show(Project $project) {
+        return view('projects.show', compact('project'));
     }
 }
